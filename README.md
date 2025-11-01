@@ -1,6 +1,6 @@
-#LMArena Helper - Project Documentation
+# LMArena Helper - Project Documentation
 
-##Project Overview
+## Project Overview
 LMArena Helper is a browser UserScript designed to significantly enhance the user experience on the lmarena.ai website. It acts as a powerful productivity tool by augmenting the chat interface with features that are essential for developers and users who frequently work with code.
 
 The project is composed of a main loader script and two modular feature scripts:
@@ -10,7 +10,7 @@ smartCodeblock.js: Focuses on improving interactions with code blocks that are a
 smartUpload.js: Adds the ability to upload local code files into the chat, with intelligent handling for large files.
 Together, these components streamline the process of sharing, saving, and managing code within the LMArena environment.
 
-##Core Features
+## Core Features
 One-Click Code Downloads: Adds a "Download" button to every code block, allowing you to save the code directly to a file with a sensible default name and file extension.
 
 Live HTML Previews: Adds a "Preview" button to HTML code blocks, which instantly renders the code in a new browser tab.
