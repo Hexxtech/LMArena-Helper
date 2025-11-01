@@ -1,4 +1,4 @@
-# LMArena Helper - Project Documentation
+# LMArena Helper
 
 ## Project Overview
 LMArena Helper is a browser UserScript designed to significantly enhance the user experience on the lmarena.ai website. It acts as a powerful productivity tool by augmenting the chat interface with features that are essential for developers and users who frequently work with code.
@@ -62,7 +62,7 @@ Navigate to `lmarena.ai` and click the **LMArena Helper** bookmark on your bookm
 
 -----------------------------------------
 
-##Full Installation
+## Full Installation
 To use this script, you need a UserScript manager browser extension.
 
 Install a UserScript manager, such as Tampermonkey (recommended) or Greasemonkey.
