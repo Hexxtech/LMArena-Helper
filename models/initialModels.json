@@ -1,0 +1,347 @@
+{
+  "database": "lmarena_models",
+  "version": "1.0",
+  "lastUpdated": "2025-11-01",
+  "models": {
+    "textChat": [
+      {
+        "id": "0199f060-b306-7e1f-aeae-0ebb4e3f1122",
+        "organization": "google",
+        "provider": "googleVertex",
+        "publicName": "gemini-2.5-pro",
+        "capabilities": {
+          "input": ["text", "image"],
+          "output": ["text", "web"]
+        },
+        "rank": 1
+      },
+      {
+        "id": "51a47cc6-5ef9-4ac7-a59c-4009230d7564",
+        "organization": null,
+        "provider": null,
+        "publicName": "gemini-2.5-pro-grounding-exp",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["text"]
+        },
+        "rank": 1
+      },
+      {
+        "id": "b0ea1407-2f92-4515-b9cc-b22a6d6c14f2",
+        "organization": "anthropic",
+        "provider": "googleVertexAnthropic",
+        "publicName": "claude-sonnet-4-5-20250929-thinking-32k",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["text", "web"]
+        },
+        "rank": 1
+      },
+      {
+        "id": "f1a2eb6f-fc30-4806-9e00-1efd0d73cbc4",
+        "organization": "anthropic",
+        "provider": "googleVertexAnthropic",
+        "publicName": "claude-opus-4-1-20250805-thinking-16k",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["text"]
+        },
+        "rank": 1
+      },
+      {
+        "id": "983bc566-b783-4d28-b24c-3c8b08eb1086",
+        "organization": "openai",
+        "provider": "openai",
+        "publicName": "gpt-5-high",
+        "capabilities": {
+          "input": ["text", "image"],
+          "output": ["text"]
+        },
+        "rank": 2
+      },
+      {
+        "id": "cb0f1e24-e8e9-4745-aabc-b926ffde7475",
+        "organization": "openai",
+        "provider": "openai",
+        "publicName": "o3-2025-04-16",
+        "capabilities": {
+          "input": ["text", "image"],
+          "output": ["text"]
+        },
+        "rank": 2
+      },
+      {
+        "id": "019a2d13-28a5-7205-908c-0a58de904617",
+        "organization": "anthropic",
+        "provider": "googleVertexAnthropic",
+        "publicName": "claude-sonnet-4-5-20250929",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["text", "web"]
+        },
+        "rank": 2
+      },
+      {
+        "id": "96ae95fd-b70d-49c3-91cc-b58c7da1090b",
+        "organization": "anthropic",
+        "provider": "googleVertexAnthropic",
+        "publicName": "claude-opus-4-1-20250805",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["text", "web"]
+        },
+        "rank": 2
+      },
+      {
+        "id": "0199c1e0-3720-742d-91c8-787788b0a19b",
+        "organization": "openai",
+        "provider": "openai",
+        "publicName": "chatgpt-4o-latest-20250326",
+        "capabilities": {
+          "input": ["text", "image"],
+          "output": ["text"]
+        },
+        "rank": 2
+      },
+      {
+        "id": "812c93cc-5f88-4cff-b9ca-c11a26599b0e",
+        "organization": "alibaba",
+        "provider": "alibaba",
+        "publicName": "qwen3-max-preview",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["text"]
+        },
+        "rank": 3
+      }
+    ],
+    "imageGeneration": [
+      {
+        "id": "7766a45c-1b6b-4fb8-9823-2557291e1ddd",
+        "organization": "tencent",
+        "provider": "tencent",
+        "publicName": "hunyuan-image-3.0",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["image"],
+          "aspectRatios": ["1:1"]
+        },
+        "rank": 1
+      },
+      {
+        "id": "0199ef2a-583f-7088-b704-b75fd169401d",
+        "organization": "google",
+        "provider": "google-genai",
+        "publicName": "gemini-2.5-flash-image-preview (nano-banana)",
+        "capabilities": {
+          "input": ["text", "image"],
+          "output": ["image"],
+          "imageInput": {
+            "requiresUpload": false,
+            "multipleImages": true
+          },
+          "aspectRatios": ["1:1"]
+        },
+        "rank": 1
+      },
+      {
+        "id": "f8aec69d-e077-4ed1-99be-d34f48559bbf",
+        "organization": "google",
+        "provider": "googleVertex",
+        "publicName": "imagen-4.0-ultra-generate-preview-06-06",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["image"],
+          "aspectRatios": ["1:1"]
+        },
+        "rank": 3
+      },
+      {
+        "id": "32974d8d-333c-4d2e-abf3-f258c0ac1310",
+        "organization": "bytedance",
+        "provider": "fal",
+        "publicName": "seedream-4-high-res-fal",
+        "capabilities": {
+          "input": ["text", "image"],
+          "output": ["image"],
+          "imageInput": {
+            "requiresUpload": false,
+            "multipleImages": true
+          },
+          "aspectRatios": ["1:1"]
+        },
+        "rank": 4
+      },
+      {
+        "id": "bb97bc68-131c-4ea4-a59e-03a6252de0d2",
+        "organization": "openai",
+        "provider": "openai",
+        "publicName": "dall-e-3",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["image"],
+          "aspectRatios": ["1:1"]
+        },
+        "rank": 42
+      }
+    ],
+    "imageEditing": [
+      {
+        "id": "32bff2df-00e6-409b-ad3f-bfbad87cc49f",
+        "organization": null,
+        "provider": null,
+        "publicName": "hidream-e1.1",
+        "capabilities": {
+          "input": ["text", "image"],
+          "output": ["image"],
+          "imageInput": {
+            "requiresUpload": true,
+            "multipleImages": false
+          },
+          "aspectRatios": ["1:1"]
+        },
+        "rank": null
+      },
+      {
+        "id": "995cf221-af30-466d-a809-8e0985f83649",
+        "organization": "alibaba",
+        "provider": "alibaba",
+        "publicName": "qwen-image-edit",
+        "capabilities": {
+          "input": ["text", "image"],
+          "output": ["image"],
+          "imageInput": {
+            "requiresUpload": true,
+            "multipleImages": false
+          },
+          "aspectRatios": ["1:1"]
+        },
+        "rank": null
+      }
+    ],
+    "search": [
+      {
+        "id": "9217ac2d-91bc-4391-aa07-b8f9e2cf11f2",
+        "organization": "xai",
+        "provider": "xaiResearchSearch",
+        "publicName": "grok-4-fast-search",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["search"]
+        },
+        "rank": 1
+      },
+      {
+        "id": "c8711485-d061-4a00-94d2-26c31b840a3d",
+        "organization": "perplexity",
+        "provider": "perplexity",
+        "publicName": "ppl-sonar-pro-high",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["search"]
+        },
+        "rank": 2
+      },
+      {
+        "id": "fbe08e9a-3805-4f9f-a085-7bc38e4b51d1",
+        "organization": "openai",
+        "provider": "openaiResponses",
+        "publicName": "o3-search",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["search"]
+        },
+        "rank": 2
+      },
+      {
+        "id": "d14d9b23-1e46-4659-b157-a3804ba7e2ef",
+        "organization": "openai",
+        "provider": "openaiResponses",
+        "publicName": "gpt-5-search",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["search"]
+        },
+        "rank": 2
+      }
+    ],
+    "experimental": [
+      {
+        "id": "0199f059-3877-7cfe-bc80-e01b1a4a83de",
+        "organization": "google",
+        "provider": "googleVertex",
+        "publicName": "gemini-2.5-flash",
+        "capabilities": {
+          "input": ["text", "image"],
+          "output": ["text"]
+        },
+        "rank": null,
+        "category": "experimental"
+      },
+      {
+        "id": "0199de70-e6ad-7276-9020-a7502bed99ad",
+        "organization": null,
+        "provider": null,
+        "publicName": "flying-octopus",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["text"]
+        },
+        "rank": null,
+        "category": "anonymous"
+      },
+      {
+        "id": "c15b93ed-e87b-467f-8f9f-d830fd7aa54d",
+        "organization": null,
+        "provider": null,
+        "publicName": "lmarena-internal-test-only",
+        "capabilities": {
+          "input": ["text"],
+          "output": ["text"]
+        },
+        "rank": null,
+        "category": "internal"
+      }
+    ]
+  },
+  "statistics": {
+    "totalModels": 117,
+    "byCategory": {
+      "textChat": 86,
+      "imageGeneration": 20,
+      "imageEditing": 4,
+      "search": 10,
+      "experimental": 31
+    },
+    "byOrganization": {
+      "openai": 15,
+      "anthropic": 12,
+      "google": 11,
+      "alibaba": 14,
+      "xai": 6,
+      "meta": 4,
+      "mistral": 4,
+      "tencent": 3,
+      "deepseek": 3,
+      "zai": 4,
+      "perplexity": 2,
+      "unknown": 49
+    },
+    "rankedModels": 86,
+    "unrankedModels": 31
+  },
+  "queryHelpers": {
+    "getByRank": {
+      "description": "Filter models by rank",
+      "example": "models.textChat.filter(m => m.rank === 1)"
+    },
+    "getByOrganization": {
+      "description": "Filter models by organization",
+      "example": "models.textChat.filter(m => m.organization === 'openai')"
+    },
+    "getByCapability": {
+      "description": "Filter models by input/output capability",
+      "example": "models.textChat.filter(m => m.capabilities.input.includes('image'))"
+    }
+  }
+}
