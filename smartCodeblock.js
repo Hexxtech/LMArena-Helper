@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Smart Codeblock
 // @namespace    http://tampermonkey.net/
-// @version      2.5
+// @version      2.6
 // @description  Adds download and preview buttons to code blocks on arena.lmsys.org with smart type detection.
 // @author       Xedric Antiola
 // @match        https://lmarena.ai/*
@@ -19,7 +19,9 @@
     const extensionMap = {
         'python': 'py', 'javascript': 'js', 'html': 'html', 'css': 'css',
         'json': 'json', 'shell': 'sh', 'bash': 'sh', 'typescript': 'ts',
-        'xml': 'xml', 'markdown': 'md', 'text': 'txt'
+        'xml': 'xml', 'markdown': 'md', 'text': 'txt', 'java': 'java',
+        'csharp': 'cs', 'cpp': 'cpp', 'c++': 'cpp', 'ruby': 'rb',
+        'go': 'go', 'sql': 'sql', 'yaml': 'yml', 'php': 'php'
     };
 
     // Language options for the codeblock dialog
@@ -222,16 +224,39 @@
      * @returns {string} The detected file type
      */
     function detectCodeType(codeBlockHeader) {
-        const typeSpan = codeBlockHeader.querySelector('div > span');
+        // New structure: look for span with language name
+        const typeSpan = codeBlockHeader.querySelector('.flex.items-center.gap-2 span.text-text-secondary');
         const fileType = typeSpan?.textContent.trim().toLowerCase() || 'text';
         return fileType;
     }
 
-    function addDownloadButton(codeBlockHeader) {
-        // Check if our button group is already there to prevent duplicates
-        if (codeBlockHeader.querySelector('.button-group-wrapper')) return;
+    /**
+     * Gets the code content from a code block header
+     * @param {Element} codeBlockHeader - The code block header element
+     * @returns {string|null} The code content or null if not found
+     */
+    function getCodeContent(codeBlockHeader) {
+        // The code is in a sibling element after the header
+        let nextElement = codeBlockHeader.nextElementSibling;
+        
+        // Find the pre/code element
+        while (nextElement) {
+            const codeElement = nextElement.querySelector('code');
+            if (codeElement) {
+                return codeElement.textContent || '';
+            }
+            nextElement = nextElement.nextElementSibling;
+        }
+        
+        return null;
+    }
 
-        const copyButton = codeBlockHeader.querySelector('[data-sentry-component="CopyButton"]');
+    function addDownloadButton(codeBlockHeader) {
+        // Check if our buttons are already added
+        if (codeBlockHeader.querySelector('.code-download-button')) return;
+
+        // Find the copy button - updated selector for new structure
+        const copyButton = codeBlockHeader.querySelector('button[data-state="closed"]');
         if (!copyButton) {
             console.warn("Smart Codeblock: Could not find copy button to attach to.");
             return;
@@ -240,15 +265,9 @@
         // Detect code type
         const codeType = detectCodeType(codeBlockHeader);
 
-        // Create a wrapper for the buttons
-        const buttonWrapper = document.createElement('div');
-        buttonWrapper.className = 'flex items-center button-group-wrapper';
-
-        // Create the download button with simple down arrow icon
+        // Create the download button
         const downloadButton = copyButton.cloneNode(true);
         downloadButton.classList.add('code-download-button');
-        downloadButton.setAttribute('data-state', 'closed');
-        downloadButton.removeAttribute('data-slot');
         downloadButton.title = "Download file";
 
         downloadButton.innerHTML = `
@@ -262,18 +281,13 @@
             handleDownload(codeBlockHeader);
         });
 
-        // Replace the original copy button with our wrapper
-        copyButton.replaceWith(buttonWrapper);
+        // Insert download button before copy button
+        copyButton.parentElement.insertBefore(downloadButton, copyButton);
 
-        // Add download button first
-        buttonWrapper.appendChild(downloadButton);
-
-        // If HTML, add a Preview button BEFORE copy button
+        // If HTML, add a Preview button
         if (codeType === 'html') {
             const previewButton = copyButton.cloneNode(true);
             previewButton.classList.add('code-preview-button');
-            previewButton.setAttribute('data-state', 'closed');
-            previewButton.removeAttribute('data-slot');
             previewButton.title = "Preview HTML";
 
             previewButton.innerHTML = `
@@ -289,68 +303,71 @@
                 handlePreview(codeBlockHeader);
             });
 
-            // SWITCHED: Preview comes before copy
-            buttonWrapper.appendChild(previewButton);
+            // Insert preview button before copy button
+            copyButton.parentElement.insertBefore(previewButton, copyButton);
         }
-
-        // Copy button comes last
-        buttonWrapper.appendChild(copyButton);
     }
 
     function handleDownload(codeBlockHeader) {
-        const codeWrapper = codeBlockHeader.nextElementSibling;
-        const codeElement = codeWrapper?.querySelector('code');
+        try {
+            const codeContent = getCodeContent(codeBlockHeader);
 
-        if (!codeElement) {
-            alert("Could not find code content to download.");
-            return;
+            if (!codeContent) {
+                alert("Could not find code content to download.");
+                return;
+            }
+
+            const fileType = detectCodeType(codeBlockHeader);
+            const extension = extensionMap[fileType] || 'txt';
+            const defaultFilename = `code-${Date.now()}.${extension}`;
+
+            const finalFilename = prompt("Enter filename for download:", defaultFilename);
+
+            if (!finalFilename) {
+                console.log("Smart Codeblock: Download cancelled by user.");
+                return;
+            }
+
+            const blob = new Blob([codeContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = finalFilename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Smart Codeblock: Download failed', error);
+            alert('Failed to download code. Please try again.');
         }
-        const codeContent = codeElement.textContent || '';
-
-        const fileType = detectCodeType(codeBlockHeader);
-        const extension = extensionMap[fileType] || 'txt';
-        const defaultFilename = `code-${Date.now()}.${extension}`;
-
-        const finalFilename = prompt("Enter filename for download:", defaultFilename);
-
-        if (!finalFilename) {
-            console.log("Smart Codeblock: Download cancelled by user.");
-            return;
-        }
-
-        const blob = new Blob([codeContent], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = finalFilename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
     }
 
     function handlePreview(codeBlockHeader) {
-        const codeWrapper = codeBlockHeader.nextElementSibling;
-        const codeElement = codeWrapper?.querySelector('code');
+        try {
+            const htmlContent = getCodeContent(codeBlockHeader);
 
-        if (!codeElement) {
-            alert("Could not find HTML content to preview.");
-            return;
+            if (!htmlContent) {
+                alert("Could not find HTML content to preview.");
+                return;
+            }
+
+            // Open a new window
+            const newWindow = window.open('', '_blank');
+            
+            if (!newWindow) {
+                alert("Preview blocked by popup blocker. Please allow popups for this site.");
+                return;
+            }
+
+            // Write the HTML content directly to the new window's document
+            newWindow.document.open();
+            newWindow.document.write(htmlContent);
+            newWindow.document.close();
+        } catch (error) {
+            console.error('Smart Codeblock: Preview failed', error);
+            alert('Failed to preview HTML. Please try again.');
         }
-        const htmlContent = codeElement.textContent || '';
-
-        // Open a new window
-        const newWindow = window.open('', '_blank');
-        
-        if (!newWindow) {
-            alert("Preview blocked by popup blocker. Please allow popups for this site.");
-            return;
-        }
-
-        // Write the HTML content directly to the new window's document
-        newWindow.document.open();
-        newWindow.document.write(htmlContent);
-        newWindow.document.close();
     }
 
     // --- Codeblock Button Functions ---
@@ -403,14 +420,23 @@
         counter.className = 'codeblock-dialog-counter';
         counter.textContent = '0 / 119500 characters';
 
+        const submitButton = document.createElement('button');
+        submitButton.className = 'codeblock-dialog-button codeblock-dialog-button-submit';
+        submitButton.textContent = 'Send as Codeblock';
+
         textarea.addEventListener('input', () => {
             const length = textarea.value.length;
             counter.textContent = `${length} / 119500 characters`;
             
-            if (length > 110000) {
+            if (length > 119500) {
+                counter.className = 'codeblock-dialog-counter limit-exceeded';
+                submitButton.disabled = true;
+            } else if (length > 110000) {
                 counter.className = 'codeblock-dialog-counter limit-warning';
+                submitButton.disabled = false;
             } else {
                 counter.className = 'codeblock-dialog-counter';
+                submitButton.disabled = false;
             }
         });
 
@@ -424,9 +450,6 @@
             document.body.removeChild(overlay);
         });
 
-        const submitButton = document.createElement('button');
-        submitButton.className = 'codeblock-dialog-button codeblock-dialog-button-submit';
-        submitButton.textContent = 'Send as Codeblock';
         submitButton.addEventListener('click', () => {
             const content = textarea.value.trim();
             const language = languageSelect.value;
@@ -503,7 +526,7 @@
 
         // Try to click submit button after a delay
         setTimeout(() => {
-            const submitButton = document.querySelector('button[type="submit"][data-sentry-element="Button"]');
+            const submitButton = document.querySelector('button[type="submit"]');
             if (submitButton && !submitButton.disabled) {
                 submitButton.click();
             } else {
@@ -520,8 +543,7 @@
         const container = document.querySelector('.flex.justify-between.gap-4 .flex.items-center.gap-2');
         
         if (!container) {
-            console.warn("Smart Codeblock: Could not find button container");
-            return;
+            return; // Silently fail, will retry
         }
 
         // Create the codeblock button with side-by-side panel icon
@@ -554,11 +576,12 @@
         for (const mutation of mutations) {
             for (const node of mutation.addedNodes) {
                 if (node.nodeType === Node.ELEMENT_NODE) {
-                    // Handle codeblock headers
-                    if (node.matches('[data-sentry-element="CodeBlockGroup"]')) {
+                    // NEW: Look for the updated codeblock header structure
+                    // The header has class "border-border" and contains language info
+                    if (node.matches('.border-border.flex.items-center.justify-between.border-b.px-4.py-2')) {
                         addDownloadButton(node);
                     }
-                    const headers = node.querySelectorAll('[data-sentry-element="CodeBlockGroup"]');
+                    const headers = node.querySelectorAll('.border-border.flex.items-center.justify-between.border-b.px-4.py-2');
                     headers.forEach(addDownloadButton);
 
                     // Handle chat input area
@@ -575,10 +598,18 @@
     observer.observe(document.body, { childList: true, subtree: true });
 
     // Initialize existing elements
-    document.querySelectorAll('[data-sentry-element="CodeBlockGroup"]').forEach(addDownloadButton);
+    document.querySelectorAll('.border-border.flex.items-center.justify-between.border-b.px-4.py-2').forEach(addDownloadButton);
     addCodeblockButton();
 
-    // Re-check for button periodically in case it's added after initial load
-    setInterval(addCodeblockButton, 2000);
+    // Re-check for button periodically (with limit to prevent memory leaks)
+    let checkCount = 0;
+    const maxChecks = 30; // Stop after 1 minute
+    const intervalId = setInterval(() => {
+        addCodeblockButton();
+        checkCount++;
+        if (checkCount >= maxChecks) {
+            clearInterval(intervalId);
+        }
+    }, 2000);
 
 })();
