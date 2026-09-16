@@ -44,7 +44,8 @@
             'button[type="submit"]',
             'button[aria-label*="Send"]',
             'button[aria-label*="submit"]',
-            'form button[type="submit"]'
+            'form button[type="submit"]',
+            'button[aria-label*="Send message"]'
         ];
         
         for (const selector of selectors) {
