@@ -51,9 +51,7 @@ If you have trouble dragging the link, you can add it manually:
 2.  **Name:** `LMArena Helper`
 3.  **URL:** Copy and paste the entire code block below.
 
-    ```javascript
-    javascript:(function(){"use strict";if(window.lmArenaHelperLoaded)return void alert("LMArena Helper is already active!");fetch("https://hexxtech.github.io/lmarena-helper/lmarena-helper.js").then((e=>{if(!e.ok)throw new Error(`Network response was not ok: ${e.statusText}`);return e.text()})).then((e=>{const t=document.createElement("script");t.textContent=e,document.head.appendChild(t)})).catch((e=>{console.error("LMArena Helper Bookmarklet Error:",e),alert("Could not load the LMArena Helper script. Please check the browser console (F12) for more details.")}))})();
-    ```
+    ```javascript:(function(){"use strict";if(window.lmArenaHelperLoaded)return void alert("LMArena Helper is already active!");fetch("https://raw.githubusercontent.com/Hexxtech/LMArena-Helper/refs/heads/main/LMArena-Helper.js").then((e=>{if(!e.ok)throw new Error(`Network response was not ok: ${e.statusText}`);return e.text()})).then((e=>{const t=document.createElement("script");t.textContent=e,document.head.appendChild(t)})).catch((e=>{console.error("LMArena Helper Bookmarklet Error:",e),alert("Could not load the LMArena Helper script. Please check the browser console (F12) for more details.")}))})();```
 4.  Save the bookmark.
 
 ---
